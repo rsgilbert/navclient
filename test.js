@@ -9,8 +9,11 @@ const authOptions = {
 const req = initialize(authOptions)
 
 const reqOptions = {
-    method: 'GET',
-    url: "http://junit:7148/BC140/ODataV4/Company('AVSI%20Kampala')/MyDimensionQuery"
+    method: 'PATCH',
+    url: "http://junit:7148/BC140/ODataV4/Company('AVSI%20Kampala')/MyTimesheetList",
+    json: {
+        Description: "Greetings"
+    }
 }
 
 req(reqOptions).then(value => {

@@ -9,13 +9,14 @@ async function get(options) {
 
 // Send a request to NAV using NTLM authentication.
 // Relies on values stored in environmental variables.
-async function getNtlm({ method, url, username, password, domain }) {
+async function getNtlm({ method, url, json, username, password, domain }) {
 
     const options = { 
         url, 
         username, 
         password,
-        domain
+        domain,
+        json
     }
     try {
         const result = await new Promise((resolve, reject) => {
@@ -40,7 +41,8 @@ async function getNtlm({ method, url, username, password, domain }) {
             response.statusMessage ='Windows Authentication failed'
         }
         else {
-            response.statusMessage = 'Web service gave an error'
+            console.log(result)
+            response.statusMessage = result.body
         }
         return response
     } catch(err) {
@@ -52,10 +54,10 @@ async function getNtlm({ method, url, username, password, domain }) {
 function initialize({ username, password, domain }) {
     return request;
     
-    async function request({ method, url }){
+    async function request({ method, url, json }){
         const options = {
             method: method.toLowerCase(), // httpntlm uses lowercase methods
-            url, username, password, domain }
+            url, username, password, domain, json }
         const result = await getNtlm(options)
         return result
     }    
