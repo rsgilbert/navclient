@@ -1,6 +1,6 @@
 {
   "name": "navclient",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Microsoft Dynamics web service client",
   "main": "index.js",
   "scripts": {
