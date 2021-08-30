@@ -1,4 +1,4 @@
-const { initialize } = require('./ntlm')
+const { initialize } = require('./index')
 
 const authOptions = {
     username: 'GilbertS',
@@ -6,19 +6,28 @@ const authOptions = {
     domain: 'JUNIT'
 }
 
-const req = initialize(authOptions)
+const request = initialize(authOptions)
 
-const reqOptions = {
-    method: 'PATCH',
+const requestOptions = {
+    method: 'POST',
     url: "http://junit:7148/BC140/ODataV4/Company('AVSI%20Kampala')/MyTimesheetList",
-    json: {
-        Description: "Greetings"
-    }
+    // json: {
+    //     Description: "Greetings"
+    // },
+    body : JSON.stringify({
+        Description: 'Milkshake'
+    })
 }
 
-req(reqOptions).then(value => {
-    console.log(JSON.stringify(value))
+request(requestOptions, (err, data) => {
+    if(err) {
+        return console.log(err)
+    } 
+    console.log(JSON.stringify(data))
 })
-.catch(err => {
-    console.log(err)
-})
+
+
+
+
+
+
