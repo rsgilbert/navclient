@@ -4,18 +4,18 @@ const httpntlm = require('httpntlm')
 // Send a request to NAV using NTLM authentication.
 // Relies on values stored in environmental variables.
 async function sendNtlmRequest({ 
-    method, url, json, body, username, password, domain 
+    method, url, json, username, password, domain, etag
 }, requestCallback) {
     const options = { 
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'if-match': etag
         },
         url, 
         username, 
         password,
         domain,
-        json, // optional (this will be the object itself that can be parsed)
-        body  // optional (this will be got by JSON.stringify)
+        json 
     }
     try {
         const result = await new Promise((resolve, reject) => {
@@ -32,7 +32,9 @@ async function sendNtlmRequest({
         response.statusCode = result.statusCode
 
         if(statusCode >= 200 && statusCode < 300) {
-            response.data = JSON.parse(result.body)            
+            if(result.body) {
+                response.data = JSON.parse(result.body)   
+            }         
         }
 
         else if(result.statusCode === 401) {
@@ -53,10 +55,10 @@ async function sendNtlmRequest({
 function initialize({ username, password, domain }) {
     return request;
     
-    async function request({ method, url, json, body }, responseCallback){
+    async function request({ method, url, json, etag }, responseCallback){
         const options = {
             method: method.toLowerCase(), // httpntlm uses lowercase methods
-            url, username, password, domain, json, body
+            url, username, password, domain, json, etag
         }
         sendNtlmRequest(options, (err, data) => {
             if(err) {
