@@ -26,26 +26,7 @@ async function sendNtlmRequest({
                 resolve(res)
             })
         })
-        
-        const response = {}     
-        const statusCode = result.statusCode   
-        response.statusCode = result.statusCode
-
-        if(statusCode >= 200 && statusCode < 300) {
-            if(result.body) {
-                response.data = JSON.parse(result.body)   
-            }         
-        }
-
-        else if(result.statusCode === 401) {
-            console.error(`Authentication failed: username: ${USERNAME}, password: ${PASSWORD}, domain: ${DOMAIN}`)
-            response.statusMessage ='Windows Authentication failed'
-        }
-        else {
-            console.log(result)
-            response.statusMessage = result.body
-        }
-        requestCallback(null, response)
+        requestCallback(null, result)
     } catch(err) {
         // console.log('failed', err)
         requestCallback(err)
